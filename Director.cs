@@ -7,7 +7,7 @@ namespace hilo_program
     {
         Card card = new Card();
 
-        bool isPlaying;
+        bool isPlaying = true;
 
         int score = 300;
 
@@ -16,6 +16,8 @@ namespace hilo_program
         int nextCardNum = 1;
 
         string guess = "idk";
+
+        string again = "idk";
         public void StartGame()
         {
             
@@ -25,7 +27,7 @@ namespace hilo_program
             {
                 ChangeGuessing(previousNum);
 
-                nextCardNum = card.NextCardNum();
+                GetNextCardNum();
 
                 DoUpdates1(guess, previousNum, nextCardNum);
 
@@ -37,13 +39,20 @@ namespace hilo_program
 
         public void ChangeGuessing(int cardNum)
         {
-            
             Console.WriteLine($"\nThe card is: {cardNum}");
 
             Console.WriteLine("Higher or lower? [h/l]");
 
             guess = Console.ReadLine();
-            
+        }
+
+        public void GetNextCardNum()
+        {
+            do
+            {
+                nextCardNum = card.NextCardNum();
+
+            } while (previousNum == nextCardNum);
         }
 
         public void DoUpdates1(string guess, int previousNum, int nextCardNum)
@@ -56,7 +65,6 @@ namespace hilo_program
             {
                 isPlaying = false;
             }
-
         }
 
         public void DoOutputs()
@@ -73,18 +81,18 @@ namespace hilo_program
             {
                 Console.WriteLine("Play again? [y/n]");
 
-                string again = Console.ReadLine();
-                
-                if (again == "n")
-                {
-                    isPlaying = false;
-                }
+                again = Console.ReadLine();
             }
 
         }
 
         public void DoUpdates2()
         {
+            if (again == "n")
+            {
+                isPlaying = false;
+            }
+
             previousNum = nextCardNum;
         }
     }

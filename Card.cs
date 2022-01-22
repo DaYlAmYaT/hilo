@@ -4,7 +4,7 @@ namespace hilo_program
 {
     public class Card
     {
-        public int cardNum = 1;
+        public int randomCard = 1;
 
         public int points = 300;
 
@@ -17,9 +17,9 @@ namespace hilo_program
         {
             Random randomGenerator = new Random();
 
-            cardNum = randomGenerator.Next(1, 14);
+            randomCard = randomGenerator.Next(1, 14);
 
-            return cardNum;
+            return randomCard;
         }
 
         public int GetPoints(string guess, int previousNum, int currentNum)
