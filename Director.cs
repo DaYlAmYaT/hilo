@@ -1,4 +1,5 @@
 using System;
+
 using System.Collections.Generic;
 
 namespace hilo_program
@@ -7,73 +8,45 @@ namespace hilo_program
     {
         Card card = new Card();
 
-        bool isPlaying = true;
+        Player player = new Player();
 
-        int score = 300;
-
-        int previousNum = 1;
-
-        int nextCardNum = 1;
-
-        string guess = "idk";
-
-        string again = "idk";
         public void StartGame()
-        {
-            
-            previousNum = card.NextCardNum();
+        {   
+            player._previousNum = card.GetCardNum();
 
-            while (isPlaying)
+            while (player._isPlayer && !player._gameOver)
             {
-                ChangeGuessing(previousNum);
+                player.GetGuessing();
 
-                GetNextCardNum();
+                player._currentNum = card.GetNextCardNum(player._previousNum, player._currentNum);
 
-                DoUpdates1(guess, previousNum, nextCardNum);
+                DoUpdates();
 
                 DoOutputs();
-
-                DoUpdates2();
             }
+
+            EndGameMessage();
         }
 
-        public void ChangeGuessing(int cardNum)
+        public void DoUpdates()
         {
-            Console.WriteLine($"\nThe card is: {cardNum}");
+            int points = player.GetPoints();
 
-            Console.WriteLine("Higher or lower? [h/l]");
+            player._score += points;
 
-            guess = Console.ReadLine();
-        }
-
-        public void GetNextCardNum()
-        {
-            do
+            if (player._score <= 0)
             {
-                nextCardNum = card.NextCardNum();
-
-            } while (previousNum == nextCardNum);
-        }
-
-        public void DoUpdates1(string guess, int previousNum, int nextCardNum)
-        {
-            int points = card.GetPoints(guess, previousNum, nextCardNum);
-
-            score += points;
-
-            if (score <= 0)
-            {
-                isPlaying = false;
+                player._gameOver = true;
             }
         }
 
         public void DoOutputs()
         {
-            Console.WriteLine($"Next card was: {nextCardNum}");
+            Console.WriteLine($"Next card was: {player._currentNum}");
 
-            Console.WriteLine($"Your score is: {score}");
+            Console.WriteLine($"Your score is: {player._score}");
 
-            if (!isPlaying)
+            if (!player._isPlayer || player._gameOver)
             {
                 return;
             }
@@ -81,19 +54,30 @@ namespace hilo_program
             {
                 Console.WriteLine("Play again? [y/n]");
 
-                again = Console.ReadLine();
+                string userInput = Console.ReadLine();
+
+                if (userInput != "y")
+                {
+                    player._isPlayer = false;
+                }
+
+                player._previousNum = player._currentNum;
             }
 
         }
 
-        public void DoUpdates2()
+        public void EndGameMessage()
         {
-            if (again == "n")
+            if (player._gameOver)
             {
-                isPlaying = false;
+                Console.WriteLine("\nGame Over!");
+            }
+            else
+            {
+                Console.WriteLine("\nNice Job!");
             }
 
-            previousNum = nextCardNum;
+            Console.WriteLine("Thanks for playing!");
         }
     }
 }

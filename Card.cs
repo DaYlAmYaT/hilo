@@ -6,14 +6,13 @@ namespace hilo_program
     {
         public int randomCard = 1;
 
-        public int points = 300;
-
         public Card()
         {
 
         }
 
-        public int NextCardNum()
+
+        public int GetCardNum()
         {
             Random randomGenerator = new Random();
 
@@ -22,22 +21,16 @@ namespace hilo_program
             return randomCard;
         }
 
-        public int GetPoints(string guess, int previousNum, int currentNum)
-        {
-            bool correct = false;
 
-            if (((guess == "h") && (previousNum < currentNum)) || ((guess == "l") && (previousNum > currentNum)))
+        public int GetNextCardNum(int previousNum, int nextCardNum)
+        {
+            do
             {
-                correct = true;
-            }
-            if (correct)
-            {
-                return 100;
-            }
-            else
-            {
-                return -75;
-            }
+                nextCardNum = GetCardNum();
+
+            } while (previousNum == nextCardNum);
+
+            return nextCardNum;
         }
     }
 }
